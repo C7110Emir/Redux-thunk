@@ -1,25 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
-
-function App() {
+import UserCard from "./components/UserCard.js"
+import {connect} from 'react-redux'
+import {getUserInfos} from "./redux/actions"
+import {React, useEffect} from "react"
+function App({users, loading, getUserInfos}) {
+  console.log(users,loading)
+  useEffect(()=>{
+    getUserInfos()
+  },[getUserInfos])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>REDUX-THUNK</h1>
+      <UserCard users={users} loading={loading} />
     </div>
   );
 }
+const mapStateToProps = (state) =>{
+  return {
+    users: state.users,
+    loading: state.loading,
 
-export default App;
+  }
+}
+const mapDispatchToProps = (dispatch) =>{
+  return{
+    getUserInfos: () => dispatch(getUserInfos())
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(App);
